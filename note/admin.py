@@ -1,4 +1,4 @@
 from django.contrib import admin
-from note.models import *
-# Register your models here.
+from .models import Note
+
 admin.site.register(Note)
