@@ -26,4 +26,6 @@ urlpatterns = [
     path('api/orders/',include('orders.urls')),
     path('api/',include('note.urls')),
     path('api/token/',obtain_auth_token),
+    path('home/',include('home.urls')),
+    path('', include('home.urls')),
 ]
