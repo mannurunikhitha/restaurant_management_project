@@ -7,6 +7,7 @@ from .models import Coupon
 from rest_framework.permissions import IsAuthenticated
 from .models import Order
 from .serializers import OrderSerializer
+from .utils import generate_coupon_code
 
 # Create your views here.
 class CouponValidationView(APIView):
@@ -56,3 +57,8 @@ class OrderHistoryView(APIView):
 
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data)
+
+class GenerateCouponView(APIView):
+    def get(self, request):
+        code = generate_coupon_code()
+        return Response({"coupon_code": code})
