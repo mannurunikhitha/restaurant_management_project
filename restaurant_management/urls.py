@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.authtoken.views import obtain_auth_token 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('home.urls')),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('api/orders/',include('orders.urls')),
     path('api/',include('note.urls')),
     path('api/token/',obtain_auth_token),
-    path('home/',include('home.urls')),
-    path('', include('home.urls')),
+    path('home/', include('home.urls')),
+    path('',include('home.urls')),
+    path('api/',include('products.urls')),
 ]
