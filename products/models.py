@@ -8,3 +8,7 @@ class Item(models.Model):
 
     def __str__(self):
         return str(self.item_name)
+
+class Product(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
