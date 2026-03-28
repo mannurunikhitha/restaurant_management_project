@@ -16,3 +16,10 @@ def get_daily_sales_total(date):
     orders = Order.objects.filter(created_at__date=date)
     total = orders.aggregate(total_sum=Sum('total_price'))['total_sum']
     return total if total is not None else 0
+
+def calculate_tip_amount(order_total, tip_percentage):
+    order_total = Decimal(order_total)
+    tip_percentage = Decimal(tip_percentage)
+    tip_amount = order_total * (tip_percentage/Decimal('100'))
+    tip_amount = tip_amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+    return tip_amount
