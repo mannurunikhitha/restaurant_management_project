@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import MenuCategory, MenuItem
 from .serializers import MenuCategorySerializer
 from .utils import get_today_operating_hours
 from django.http import HttpResponse
-from .serializers import MenuItemSerializer
+from .serializers import MenuItemSerializer, IngredientSerializer
 
 # Create your views here.
 class MenuCategoryListView(ListAPIView):
@@ -24,3 +24,9 @@ class FeaturedMenuItemListView(ListAPIView):
 
     def get_queryset(self):
         return MenuItem.objects.filter(is_featured=True)
+
+class MenuItemIngredientView(RetrieveAPIView):
+    serializer_class = IngredientSerializer
+    def get_queryset(self):
+        menu_item_id = self.kwargs['pk']
+        return MenuItem.objects.get(id=menu_item_id).ingredients.all()
