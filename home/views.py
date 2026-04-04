@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem
-from .serializers import MenuCategorySerializer,MenuItemSerializer
+from .models import MenuCategory, MenuItem, Table
+from .serializers import MenuCategorySerializer,MenuItemSerializer, TableSerializer
 from .utils import get_today_operating_hours
 from django.http import HttpResponse
 from .serializers import MenuItemSerializer, IngredientSerializer
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 
 # Create your views here.
+class TableDetailView(generics.RetrieveAPIView):
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
+
 class MenuCategoryListView(ListAPIView):
     queryset = MenuCategory.objects.all()
     serializer_class = MenuCategorySerializer
