@@ -59,3 +59,10 @@ class MenuItemViewSet(viewsets.ModelViewSet):
                 {"error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+@api_view(['post'])
+def check_email(request):
+    email = request.data.get('email')
+    if not is_valid_email(email):
+        return Response({"error": "Invalid email"})
+    return Response({"message": "Email is valid"})
