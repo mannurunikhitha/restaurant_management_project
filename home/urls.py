@@ -11,4 +11,5 @@ urlpatterns = [
     path('featured-menu/', FeaturedMenuItemListView.as_view(), name='featured-menu'),
     path('api/menu-items/<int:pk>/ingredients/', MenuCategoryListView.as_view(), name='menu-item-ingredients'),
     path('api/',include(router.urls)),
+    path('tables/<int:pk>/', TableDetailView.as_view(), name='table-detail'),
 ]
