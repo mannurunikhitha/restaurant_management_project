@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/menu-items/<int:pk>/ingredients/', MenuCategoryListView.as_view(), name='menu-item-ingredients'),
     path('api/',include(router.urls)),
     path('tables/<int:pk>/', TableDetailView.as_view(), name='table-detail'),
+    path('check-email/', check_email),
 ]
