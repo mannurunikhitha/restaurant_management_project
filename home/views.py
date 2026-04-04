@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from .serializers import MenuItemSerializer, IngredientSerializer
 from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
+from .validation_utils import is_valid_email
 
 # Create your views here.
 class TableDetailView(generics.RetrieveAPIView):
