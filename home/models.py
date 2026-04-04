@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.db,models import Count
 # Create your models here.
 
 class Table(models.Model):
@@ -11,8 +12,16 @@ class Table(models.Model):
 
 class MenuCategory(models.Model):
     name=models.CharField(max_length=100,unique=True)
+    category_name = models.CharField(max_length=100, null=True, blank=True)
     def __str__(self):
         return self.name
+
+class MenuItemManager(models.Manager):
+    def get_top_selling_items(self, num_items=5):
+        return self.annotate(
+            total_orders = Count('orderitem_set')
+            
+        ).order_by('-total_orders')[:num_items]
 
 class Restaurant(models.Model):
     name=models.CharField(max_length=255)
@@ -35,8 +44,17 @@ class MenuItem(models.Model):
     is_featured = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
     ingredients = models.ManyToManyField('Ingredient', related_name="menu_items")
+    category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE, null=True, blank=True)
     def __str__(self):
         return self.name
+
+class Order(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class OrderItem(models.Model):
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
 class DailySpecialManager(models.Manager):
     def upcoming(self):
