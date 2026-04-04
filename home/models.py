@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import date
-from django.db,models import Count
+from django.db.models import Count
 # Create your models here.
 
 class Table(models.Model):
