@@ -2,12 +2,13 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-from .models import Item
-from .serializers import ItemSerializer
+from .models import Item, Product
+from .serializers import ItemSerializer, ProductSerializer
 from rest_framework import viewsets
 from .models import Product
 from .serializers import ProductSerializer
+from rest_framework.decorators import api_view
+
 
 '''
 NOTE: Conside this as a reference and follow this same coding structure or format to work on you tasks
@@ -39,3 +40,15 @@ class ProductViewSet(viewsets.ModelViewSet):
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
+
+@api_view(['GET'])
+def get_menu_by_category(request):
+    category_name = request.GET.get('category')
+
+    if category_name:
+        items = Product.objects.filter(category__category_name__iexact=category_name)
+    else:
+        items = Product.objects.all()
+
+    serializer = ProductSerializer(items, many=True)
+    return Response(serializer.data)
