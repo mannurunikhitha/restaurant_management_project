@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class OrderStatus(models.Model):
@@ -7,6 +8,12 @@ class OrderStatus(models.Model):
         return self.name
 
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+    ]
     status = models.ForeignKey(OrderStatus,on_delete=models.SET_NULL,null=True,blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
