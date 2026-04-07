@@ -4,7 +4,6 @@ from .models import DailyOperatingHours
 from.models import MenuCategory
 
 # Register your models here.
-admin.site.register(Restaurant)
 
 admin.site.register(DailyOperatingHours)
 
