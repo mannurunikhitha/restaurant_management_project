@@ -6,6 +6,7 @@ from django.db.models import Count
 class Table(models.Model):
     table_number = models.IntegerField()
     capacity = models.IntegerField()
+    is_available = models.BooleanField(default= True, null=True, blank=True)
 
     def __str__(self):
         return str(self.table_number)
