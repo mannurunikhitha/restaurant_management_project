@@ -8,6 +8,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = Order
