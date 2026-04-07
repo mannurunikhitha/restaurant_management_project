@@ -5,4 +5,5 @@ urlpatterns = [
     path("coupons.validate/", CouponValidationView.as_view(), name="validate-coupon"),
     path("history/",OrderHistoryView.as_view(), name='order-history'),
     path("coupons/", CouponListView.as_view(), name='coupons'),
+    path("orders/<int:id>/", OrderDetailView.as_view, name='order-detail'),
 ]
