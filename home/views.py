@@ -66,3 +66,9 @@ def check_email(request):
     if not is_valid_email(email):
         return Response({"error": "Invalid email"})
     return Response({"message": "Email is valid"})
+
+class AvailableTablesAPIView(ListAPIView):
+    serializer_class = TableSerializer
+
+    def get_queryset(self):
+        return Table.objects.filter(is_available=True)
