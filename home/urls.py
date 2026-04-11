@@ -14,4 +14,5 @@ urlpatterns = [
     path('tables/<int:pk>/', TableDetailView.as_view(), name='table-detail'),
     path('check-email/', check_email),
     path('api/tables/available/', AvailableTablesAPIView.as_view(), name='available_table_api'),
+    path('restaurant-info/', restaurant_info),
 ]
