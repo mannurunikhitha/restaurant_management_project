@@ -29,7 +29,7 @@ Order ID: {order_id}
 Items:
 {items_text}
 
-Total Amount: {total_amount if total_amount else "N/A}
+Total Amount: {total_amount if total_amount else 'N/A'}
 
 We'll nofity you once your order is ready.
 
