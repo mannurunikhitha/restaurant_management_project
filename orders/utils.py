@@ -3,6 +3,49 @@ import secrets
 from .models import Coupon
 from django.db.models import Sum
 from .models import Order
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+import logging
+
+logger = logging.getLogger(__name__)
+
+def send_order_confirmation_email(order_id, customer_email, customer_name=None, items=None, total_amount=None):
+    try:
+        try:
+            validate_email(customer_email)
+        except ValidationError:
+            return {"status": "error", "message": "Invalid email"}
+        subject = f"Order Confirmation - #{order_id}"
+        items_text = "\n".join([f"- {item}" for item in items]) if items else "N/A"
+        message = f"""
+Hi {customer_name or "Customer"},
+
+Your order has been placed successfully! 🎉
+
+Order ID: {order_id}
+
+Items:
+{items_text}
+
+Total Amount: {total_amount if total_amount else "N/A}
+
+We'll nofity you once your order is ready.
+
+Thank you for ordering with us! 😊"""
+
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [customer_email],
+            fail_silently=False,
+        )
+        return {"status": "success", "message": "Email sent"}
+    except Exception as e:
+        logger.error(f"Order Email Error (Order {order_id}): {str(e)}")
+        return {"status": "error", "message": "Email failed"}
 
 def generate_coupon_code(length=10):
     characters = string.ascii_uppercase + string.digits
