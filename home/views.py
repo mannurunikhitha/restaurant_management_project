@@ -8,6 +8,8 @@ from .serializers import MenuItemSerializer, IngredientSerializer
 from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from .validation_utils import is_valid_email
+from rest_framework.decorators import api_view
+from products.models import Restaurant
 
 # Create your views here.
 class TableDetailView(generics.RetrieveAPIView):
@@ -72,3 +74,15 @@ class AvailableTablesAPIView(ListAPIView):
 
     def get_queryset(self):
         return Table.objects.filter(is_available=True)
+
+@api_view(['GET'])
+def restaurant_info(request):
+    restaurants = Restaurant.objects.all()
+    data = []
+    for r in restaurants:
+        data.append({
+            "name": r.name,
+            "address": r.address,
+            "operating_days": r.operating_days
+        })
+    return Response(data)
