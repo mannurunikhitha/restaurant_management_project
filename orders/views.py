@@ -7,7 +7,7 @@ from .models import Coupon
 from rest_framework.permissions import IsAuthenticated
 from .models import Order
 from .serializers import OrderSerializer
-from .utils import generate_coupon_code
+from .utils import generate_coupon_code, send_order_confirmation_email
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import Coupon
 from .serializers import CouponSerializer
