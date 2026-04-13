@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from .models import MenuCategory, MenuItem, Table
-from .serializers import MenuCategorySerializer,MenuItemSerializer, TableSerializer
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
+from .models import *
+from .serializers import MenuCategorySerializer,MenuItemSerializer, TableSerializer, ContactFormSubmissionSerializer
 from .utils import get_today_operating_hours
 from django.http import HttpResponse
 from .serializers import MenuItemSerializer, IngredientSerializer
@@ -86,3 +86,7 @@ def restaurant_info(request):
             "operating_days": r.operating_days
         })
     return Response(data)
+
+class ContactFormSubmissionCreateView(CreateAPIView):
+    queryset = ContactFormSubmission.objects.all()
+    serializer_class = ContactFormSubmissionSerializer
