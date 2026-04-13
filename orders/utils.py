@@ -1,5 +1,6 @@
 import string
 import secrets
+from django.db.models import Model
 from .models import Coupon
 from django.db.models import Sum
 from .models import Order
@@ -66,3 +67,20 @@ def calculate_tip_amount(order_total, tip_percentage):
     tip_amount = order_total * (tip_percentage/Decimal('100'))
     tip_amount = tip_amount.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
     return tip_amount
+
+def generate_unique_order_id(model: Model, field_name: str = "order_id", length: int = 8) -> str:
+    """
+    Generates a unique short alphanumeric ID for a given model field.
+
+    Args:
+        model: Django model class where the ID will be stored (e.g., Order)
+        field_name: The field to check uniqueness against (defaukt: 'order_id')
+        length: Length of the generated ID (default: 8)
+    Returns:
+        A unique aplhanumeric string
+    """
+    characters = string.ascii_uppercase + string.digits
+    while True:
+        random_id = ''.join(secrets.choice(characters) for _ in range(length))
+        if not model.objects.filter(**{field_name: random_id}).exists():
+            return random_id
