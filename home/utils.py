@@ -1,6 +1,37 @@
 from datetime import datetime, time
 from .models import DailyOperatingHours
 import re
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+
+def send_mail(to_email, subject, message):
+    """
+    Reusable function to send emails
+    Args:
+        to_email (str): Recipient email
+        subject (str): Email subject
+        message (str): Email body
+
+    Returns:
+        dict: status and message
+    """
+    try:
+        validate_email(to_email)
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[to_email],
+            fail_silently=False
+        )
+        return {"status": "success", "message": "Email sent successfullt"}
+    except ValidationError:
+        return {"status": "error", "message": "Invalid email address"}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 def get_today_operating_hours():
     today = datetime.now().strftime('%A')
