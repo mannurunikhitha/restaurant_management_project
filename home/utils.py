@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-def send_mail(to_email, subject, message):
+def send_email(to_email, subject, message):
     """
     Reusable function to send emails
     Args:
