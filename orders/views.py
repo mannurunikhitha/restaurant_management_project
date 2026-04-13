@@ -7,7 +7,7 @@ from .models import Coupon
 from rest_framework.permissions import IsAuthenticated
 from .models import Order
 from .serializers import OrderSerializer
-from .utils import generate_coupon_code, send_order_confirmation_email
+from .utils import generate_coupon_code, send_order_confirmation_email, generate_unique_order_id
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import Coupon
 from .serializers import CouponSerializer
@@ -74,3 +74,8 @@ class GenerateCouponView(APIView):
 class CouponListView(ListAPIView):
     queryset = Coupon.objects.all()
     serializer_class = CouponSerializer
+
+def create_order(request):
+    order = Order.objects.create(
+        order_id=generate_unique_order_id(Order)
+    )
