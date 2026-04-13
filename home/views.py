@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from .models import *
 from .serializers import MenuCategorySerializer,MenuItemSerializer, TableSerializer, ContactFormSubmissionSerializer
-from .utils import get_today_operating_hours
+from .utils import get_today_operating_hours, send_email
+from rest_framework.views import APIView
 from django.http import HttpResponse
 from .serializers import MenuItemSerializer, IngredientSerializer
 from rest_framework import viewsets, status, generics
@@ -90,3 +91,17 @@ def restaurant_info(request):
 class ContactFormSubmissionCreateView(CreateAPIView):
     queryset = ContactFormSubmission.objects.all()
     serializer_class = ContactFormSubmissionSerializer
+
+class ContactView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        name = request.data.get("name")
+        message = request.data.get("message")
+
+        result = send_email(
+            to_email=email,
+            subject="Thank you for contacting us",
+            message=f"Hi {name},\n\nWe received your message:\n{message}"
+        )
+
+        return Response(result)
