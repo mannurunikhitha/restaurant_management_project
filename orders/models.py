@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .utils import generate_unique_order_id
 
 # Create your models here.
 class OrderStatus(models.Model):
@@ -14,6 +15,7 @@ class Order(models.Model):
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
     ]
+    order_id = models.CharField(max_length=12, unique=True, blank=True, null=True)
     status = models.ForeignKey(OrderStatus,on_delete=models.SET_NULL,null=True,blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
@@ -24,6 +26,10 @@ class Order(models.Model):
         for item in self.items.all():
             item_names.add(item.menu_item.name)
         return list(item_names)
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            self.order_id = generate_unique_order_id(Order)
+        super().save(*args, **kwargs)
         
     def __str__(self):
         return f'Order #{self.id} - Status: {self.status}'
