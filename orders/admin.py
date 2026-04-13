@@ -9,3 +9,4 @@ class OrderAdmin(admin.ModelAdmin):
     actions = [mark_orders_processed]
 
 admin.site.register(Order, OrderAdmin)
+admin.site.register(PaymentMethod)
