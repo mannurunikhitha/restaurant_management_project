@@ -15,4 +15,5 @@ urlpatterns = [
     path('check-email/', check_email),
     path('api/tables/available/', AvailableTablesAPIView.as_view(), name='available_table_api'),
     path('restaurant-info/', restaurant_info),
+    path('contact/', ContactFormSubmissionCreateView.as_view(), name='contact-form'),
 ]
