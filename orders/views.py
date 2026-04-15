@@ -83,4 +83,4 @@ def create_order(request):
     )
 
 def some_view(request):
-    formatted_time = format_datetimw(datetime.now())
+    formatted_time = format_datetime(datetime.now())
