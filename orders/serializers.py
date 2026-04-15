@@ -1,5 +1,25 @@
 from rest_framework import serializers
-from .models import Order, OrderItem, Coupon
+from .models import Order, OrderItem, Coupon, OrderStatus
+
+class OrderStatusUpdateSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField()
+    status = serializers.CharField()
+    def validate(self, data):
+        order_id = data.get('order_id')
+        status_name = data.get('status')
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            raise serializers.ValidationError("Order not found")
+        
+        try:
+            status_obj = OrderStatus.objects.get(name__iexact=status_name)
+        except OrderStatus.DoesNotExist:
+            raise serializers.ValidationError("Invalid status")
+
+        data['order'] = order
+        data['status_obj'] = status_obj
+        return data
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +38,4 @@ class CouponSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coupon
         fields = '__all__'
+    
