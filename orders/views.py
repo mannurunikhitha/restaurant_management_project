@@ -11,6 +11,8 @@ from .utils import generate_coupon_code, send_order_confirmation_email, generate
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import Coupon
 from .serializers import CouponSerializer
+from datetime import datetime
+from restaurant_management.utils import format_datetimw
 
 # Create your views here.
 class CouponValidationView(APIView):
@@ -79,3 +81,6 @@ def create_order(request):
     order = Order.objects.create(
         order_id=generate_unique_order_id(Order)
     )
+
+def some_view(request):
+    formatted_time = format_datetimw(datetime.now())
