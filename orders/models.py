@@ -56,6 +56,7 @@ class OrderItem(models.Model):
 class OrderManager(models.Manager):
     def get_active_orders(self):
         return self.filter(status__in=['pending', 'processing'])
+        
 
 
 class Coupon(models.Model):
