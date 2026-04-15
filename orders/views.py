@@ -5,7 +5,7 @@ from rest_framework import status
 from django.utils import timezone
 from .models import Coupon
 from rest_framework.permissions import IsAuthenticated
-from .models import Order, PaymentMethod
+from .models import Order, PaymentMethod, OrderStatus
 from .serializers import OrderSerializer, OrderStatusUpdateSerializer, PaymentMethodSerializer
 from .utils import generate_coupon_code, send_order_confirmation_email, generate_unique_order_id
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -104,3 +104,36 @@ class PaymentMethodListView(ListAPIView):
     serializer_class = PaymentMethodSerializer
     def get_queryset(self):
         return PaymentMethod.objects.filter(is_active=True)
+
+class CancelOrderView(APIView):
+    def delete(self, request, order_id):
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoneNotExist:
+            return Response(
+                {"error": "Order not found"},
+                status=status.HTTP_404_BAD_REQUEST
+            )
+        if order.user != request.user:
+            return Response(
+                {"error": "You are not allowed to cancel this order"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        if order.status and order.status.name.lower() == 'completed':
+            return Response(
+                {"error": "Completed orders cannot be cancelled"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            cancelled_status = OrderStatus.objects.get(name__iexact='cancelled')
+        except OrderStatus.DoneNotExist:
+            return Response(
+                {"error": "Cancelled status not configured"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        order.status = cancelled_status
+        order.save()
+        return Response(
+            {"message": "Order cancelled successfully"},
+            status=status.HTTP_200_OK
+        )
