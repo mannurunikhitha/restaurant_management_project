@@ -5,8 +5,8 @@ from rest_framework import status
 from django.utils import timezone
 from .models import Coupon
 from rest_framework.permissions import IsAuthenticated
-from .models import Order
-from .serializers import OrderSerializer, OrderStatusUpdateSerializer
+from .models import Order, PaymentMethod
+from .serializers import OrderSerializer, OrderStatusUpdateSerializer, PaymentMethodSerializer
 from .utils import generate_coupon_code, send_order_confirmation_email, generate_unique_order_id
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import Coupon
@@ -99,3 +99,8 @@ class UpdateOrderStatusView(APIView):
                 "new_status": status_obj.name
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PaymentMethodListView(ListAPIView):
+    serializer_class = PaymentMethodSerializer
+    def get_queryset(self):
+        return PaymentMethod.objects.filter(is_active=True)
