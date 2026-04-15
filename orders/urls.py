@@ -6,4 +6,5 @@ urlpatterns = [
     path("history/",OrderHistoryView.as_view(), name='order-history'),
     path("coupons/", CouponListView.as_view(), name='coupons'),
     path("orders/<int:id>/", OrderDetailView.as_view(), name='order-detail'),
+    path("update-status/", UpdateOrderStatusView.as_view(), name='update-order-status'),
 ]
