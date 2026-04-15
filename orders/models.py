@@ -11,6 +11,14 @@ class OrderStatus(models.Model):
     def __str__(self):
         return self.name
 
+class OrderManager(models.Manager):
+    def active(self):
+        return self.filter(status__name__in=['pending','processing'])
+    def with_status(self, status_name):
+        return self.filter(status__name=status_name)
+    def pending(self):
+        return self.filter(status__name='pending')
+
 class Order(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -52,12 +60,6 @@ class OrderItem(models.Model):
         return total
     def __str__(self):
         return f"{self.menu_item.name} x {self.quantity}"
-
-class OrderManager(models.Manager):
-    def get_active_orders(self):
-        return self.filter(status__in=['pending', 'processing'])
-        
-
 
 class Coupon(models.Model):
     code = models.CharField(unique=True)
