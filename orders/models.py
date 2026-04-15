@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .utils import generate_unique_order_id
 from home.models import MenuItem
 from decimal import Decimal
+from restaurant_management.utils import format_datetime
 
 # Create your models here.
 class OrderStatus(models.Model):
@@ -32,6 +33,8 @@ class Order(models.Model):
         if not self.order_id:
             self.order_id = generate_unique_order_id(Order)
         super().save(*args, **kwargs)
+    def formatted_created_at(self):
+        return format_datetime(self.created_at)
         
     def __str__(self):
         return f'Order #{self.id} - Status: {self.status}'
