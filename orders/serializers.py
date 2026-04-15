@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Order, OrderItem, Coupon, OrderStatus
+from .models import Order,Customer, OrderItem, Coupon, OrderStatus
 
 class OrderStatusUpdateSerializer(serializers.Serializer):
     order_id = serializers.IntegerField()
